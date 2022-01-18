@@ -4,12 +4,9 @@ const fs = require('fs/promises');
 exports.getAllTalkers = (req, res) => {
   const path = './talker.json';
   fs.readFile(path)
-    .then((data) => {
-      const talkers = JSON.parse(data);
-      return !talkers.length
-        ? res.status(200).json([])
-        : res.status(200).json(talkers);
-    })
+    .then((data) => JSON.parse(data))
+    .then((data) =>
+      (!data.length ? res.status(200).json([]) : res.status(200).json(data)))
     .catch((err) => {
       console.error(err);
       process.exit(1);
@@ -20,16 +17,16 @@ exports.getAllTalkers = (req, res) => {
 exports.getTalkerById = (req, res) => {
   const path = './talker.json';
   const { id } = req.params;
+
+  const message = {
+    message: 'Pessoa palestrante não encontrada',
+  };
+
   fs.readFile(path)
-    .then((data) => {
-      const talkers = JSON.parse(data);
-      const response = talkers.find((talker) => talker.id === parseInt(id, 10));
-      return !response
-        ? res.status(404).json({
-            message: 'Pessoa palestrante não encontrada',
-          })
-        : res.status(200).json(response);
-    })
+    .then((data) => JSON.parse(data))
+    .then((data) => data.find((talker) => talker.id === parseInt(id, 10)))
+    .then((data) =>
+      (!data ? res.status(404).json(message) : res.status(200).json(data)))
     .catch((err) => {
       console.error(err);
       process.exit(1);
