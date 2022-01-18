@@ -1,6 +1,7 @@
 const fs = require('fs/promises');
 
-exports.get = (req, res) => {
+// Requisito 1
+exports.getAllTalkers = (req, res) => {
   const talker = './talker.json';
   fs.readFile(talker)
     .then((data) => {
@@ -13,4 +14,9 @@ exports.get = (req, res) => {
       console.error(err);
       process.exit(1);
     });
+};
+
+// Requisito 2
+exports.getTalkerById = (req, res) => {
+  res.status(200).json([{ id: req.params.id }]);
 };

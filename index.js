@@ -7,9 +7,9 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
-const getAllTalkers = require('./routes/getAllTalkers');
+const talkerRouter = require('./routes/talkerRoute');
 
-app.use('/talker', getAllTalkers);
+app.use('/talker', talkerRouter);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
