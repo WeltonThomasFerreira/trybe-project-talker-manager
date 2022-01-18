@@ -2,13 +2,13 @@ const fs = require('fs/promises');
 
 // Requisito 1
 exports.getAllTalkers = (req, res) => {
-  const talker = './talker';
-  fs.readFile(talker)
+  const path = './talker.json';
+  fs.readFile(path)
     .then((data) => {
-      const response = JSON.parse(data);
-      return !response.length
+      const talkers = JSON.parse(data);
+      return !talkers.length
         ? res.status(200).json([])
-        : res.status(200).json(response);
+        : res.status(200).json(talkers);
     })
     .catch((err) => {
       console.error(err);
@@ -17,5 +17,21 @@ exports.getAllTalkers = (req, res) => {
 };
 
 // Requisito 2
-// exports.getTalkerById = (req, res) => {
-//   const talker = './talker.json'
+exports.getTalkerById = (req, res) => {
+  const path = './talker.json';
+  const { id } = req.params;
+  fs.readFile(path)
+    .then((data) => {
+      const talkers = JSON.parse(data);
+      const response = talkers.find((talker) => talker.id === parseInt(id, 10));
+      return !response
+        ? res.status(404).json({
+            message: 'Pessoa palestrante não encontrada',
+          })
+        : res.status(200).json(response);
+    })
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+};

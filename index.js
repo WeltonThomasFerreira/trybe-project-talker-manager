@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
-const talkerRouter = require('./routes/talkerRoute');
+const talkerRouter = require('./routes/talker');
 
 app.use('/talker', talkerRouter);
 
