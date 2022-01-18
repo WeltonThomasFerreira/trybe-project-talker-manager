@@ -2,6 +2,7 @@ const randtoken = require('rand-token');
 const validator = require('email-validator');
 const PasswordValidator = require('password-validator');
 
+// Requisito 3
 exports.validateEmail = (req, res, next) => {
   const { email } = req.body;
   const emailIsRequired = 'O campo "email" é obrigatório';
