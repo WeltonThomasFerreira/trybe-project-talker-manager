@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const controller = require('../controllers/talkerController');
+const controller = require('../controllers/getAllTalkers');
 
 router.get('/', controller.get);
 module.exports = router;
