@@ -10,12 +10,8 @@ exports.validateEmail = (req, res, next) => {
   const invalidEmail = {
     message: 'O "email" deve ter o formato "email@email.com"',
   };
-  if (!email) {
-    return res.status(400).json(emailIsRequired);
-  }
-  if (!validator.validate(email)) {
-    return res.status(400).json(invalidEmail);
-  }
+  if (!email) return res.status(400).json(emailIsRequired);
+  if (!validator.validate(email)) return res.status(400).json(invalidEmail);
   next();
 };
 
@@ -29,12 +25,8 @@ exports.validatePassword = (req, res, next) => {
   const invalidPassword = {
     message: 'O "password" deve ter pelo menos 6 caracteres',
   };
-  if (!password) {
-    return res.status(400).json(passwordIsRequired);
-  }
-  if (!schema.validate(password)) {
-    return res.status(400).json(invalidPassword);
-  }
+  if (!password) return res.status(400).json(passwordIsRequired);
+  if (!schema.validate(password)) return res.status(400).json(invalidPassword);
   next();
 };
 
