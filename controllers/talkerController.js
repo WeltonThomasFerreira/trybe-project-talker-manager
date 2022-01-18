@@ -17,16 +17,12 @@ exports.getAllTalkers = (req, res) => {
 exports.getTalkerById = (req, res) => {
   const path = './talker.json';
   const { id } = req.params;
-
-  const message = {
-    message: 'Pessoa palestrante não encontrada',
-  };
-
+  const message = 'Pessoa palestrante não encontrada';
   fs.readFile(path)
     .then((data) => JSON.parse(data))
     .then((data) => data.find((talker) => talker.id === parseInt(id, 10)))
     .then((data) =>
-      (!data ? res.status(404).json(message) : res.status(200).json(data)))
+      (!data ? res.status(404).json({ message }) : res.status(200).json(data)))
     .catch((err) => {
       console.error(err);
       process.exit(1);
