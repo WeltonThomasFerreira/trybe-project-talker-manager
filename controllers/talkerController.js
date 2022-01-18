@@ -24,7 +24,7 @@ exports.getTalkerById = (req, res) => {
 
   fs.readFile(path)
     .then((data) => JSON.parse(data))
-    .then((data) => data.find((talker) => talker.id.includes(id)))
+    .then((data) => data.find((talker) => talker.id === parseInt(id, 10)))
     .then((data) =>
       (!data ? res.status(404).json(message) : res.status(200).json(data)))
     .catch((err) => {
