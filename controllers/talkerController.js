@@ -75,7 +75,7 @@ exports.validateTalkWatchedAt = (req, res, next) => {
   const { talk } = req.body;
   const invalidDate = 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"';
   if (!moment(talk.watchedAt, 'DD/MM/YYYY', true).isValid()) {
-    res.status(400).json({ message: invalidDate });
+    return res.status(400).json({ message: invalidDate });
   }
   next();
 };
