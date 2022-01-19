@@ -1,3 +1,6 @@
+// Referência: Condicional da função validateTalk, PR do Rafael Veiga
+// src: https://github.com/tryber/sd-014-b-project-talker-manager/blob/9407144110b990e57cb0ba16d6db5f5a3cd16a69/Middlewares/Validations/talkValidator.js
+
 const fs = require('fs/promises');
 const moment = require('moment');
 
@@ -36,7 +39,9 @@ exports.validateToken = (req, res, next) => {
   const tokenIsRequired = 'Token não encontrado';
   const invalidToken = 'Token inválido';
   if (!authorization) return res.status(401).json({ message: tokenIsRequired });
-  if (authorization.length !== 16) return res.status(401).json({ message: invalidToken });
+  if (authorization.length !== 16) {
+    return res.status(401).json({ message: invalidToken });
+  }
   next();
 };
 
@@ -65,7 +70,7 @@ exports.validateAge = (req, res, next) => {
 exports.validateTalk = (req, res, next) => {
   const { talk } = req.body;
   const emptyKeys = 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios';
-  if (!(talk && talk.watchedAt && talk.rate)) {
+  if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
     return res.status(400).json({ message: emptyKeys });
   }
   next();
@@ -104,4 +109,23 @@ exports.createTalker = (req, res) => {
       console.error(err);
       process.exit(1);
     });
+};
+
+// Requisito 5
+exports.editTalker = (req, res) => {
+  const path = './talker.json';
+  const { id } = req.params;
+  const { body } = req;
+  fs.readFile(path)
+    .then((data) => JSON.parse(data))
+    .then((data) => data.filter((talker) => talker.id !== parseInt(id, 10)))
+    .then((data) => {
+      const newTalker = { id: parseInt(id, 10), ...body };
+      fs.writeFile(
+        path,
+        JSON.stringify([...data, newTalker]),
+      );
+      return newTalker;
+    })
+    .then((data) => res.status(200).json(data));
 };

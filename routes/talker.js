@@ -11,6 +11,7 @@ const {
   validateTalkWatchedAt,
   validateTalkRate,
   createTalker,
+  editTalker,
 } = require('../controllers/talkerController');
 
 router
@@ -26,6 +27,17 @@ router
     createTalker,
   );
 
-router.get('/:id', getTalkerById);
+router
+  .route('/:id')
+  .get(getTalkerById)
+  .put(
+    validateToken,
+    validateName,
+    validateAge,
+    validateTalk,
+    validateTalkWatchedAt,
+    validateTalkRate,
+    editTalker,
+  );
 
 module.exports = router;
