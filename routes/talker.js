@@ -12,6 +12,7 @@ const {
   validateTalkRate,
   createTalker,
   editTalker,
+  deleteTalker,
 } = require('../controllers/talkerController');
 
 router
@@ -38,6 +39,7 @@ router
     validateTalkWatchedAt,
     validateTalkRate,
     editTalker,
-  );
+  )
+  .delete(validateToken, deleteTalker);
 
 module.exports = router;

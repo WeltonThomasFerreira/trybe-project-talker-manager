@@ -4,9 +4,10 @@
 const fs = require('fs/promises');
 const moment = require('moment');
 
+const path = './talker.json';
+
 // Requisito 1
 exports.getAllTalkers = (req, res) => {
-  const path = './talker.json';
   fs.readFile(path)
     .then((data) => JSON.parse(data))
     .then((data) =>
@@ -19,7 +20,6 @@ exports.getAllTalkers = (req, res) => {
 
 // Requisito 2
 exports.getTalkerById = (req, res) => {
-  const path = './talker.json';
   const { id } = req.params;
   const message = 'Pessoa palestrante não encontrada';
   fs.readFile(path)
@@ -95,7 +95,6 @@ exports.validateTalkRate = (req, res, next) => {
 };
 
 exports.createTalker = (req, res) => {
-  const path = './talker.json';
   const { body } = req;
   fs.readFile(path)
     .then((data) => JSON.parse(data))
@@ -113,7 +112,6 @@ exports.createTalker = (req, res) => {
 
 // Requisito 5
 exports.editTalker = (req, res) => {
-  const path = './talker.json';
   const { id } = req.params;
   const { body } = req;
   fs.readFile(path)
@@ -121,11 +119,26 @@ exports.editTalker = (req, res) => {
     .then((data) => data.filter((talker) => talker.id !== parseInt(id, 10)))
     .then((data) => {
       const newTalker = { id: parseInt(id, 10), ...body };
-      fs.writeFile(
-        path,
-        JSON.stringify([...data, newTalker]),
-      );
+      fs.writeFile(path, JSON.stringify([...data, newTalker]));
       return newTalker;
     })
-    .then((data) => res.status(200).json(data));
+    .then((data) => res.status(200).json(data))
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+};
+
+// Requisito 6
+exports.deleteTalker = (req, res) => {
+  const { id } = req.params;
+  fs.readFile(path)
+    .then((data) => JSON.parse(data))
+    .then((data) => data.filter((talker) => talker.id !== parseInt(id, 10)))
+    .then((data) => fs.writeFile(path, JSON.stringify(data)))
+    .then(() => res.status(204).end())
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
 };
