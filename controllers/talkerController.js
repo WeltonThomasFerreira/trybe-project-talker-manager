@@ -142,3 +142,28 @@ exports.deleteTalker = (req, res) => {
       process.exit(1);
     });
 };
+
+// Requisito 7
+exports.validateQuery = (req, res, next) => {
+  const { q: searchQuery } = req.query;
+  if (!searchQuery) {
+    fs.readFile(path)
+      .then((data) => JSON.parse(data))
+      .then((data) => res.status(200).json(data));
+  }
+  next();
+};
+
+exports.searchTalker = (req, res) => {
+  const { q: searchQuery } = req.query;
+  fs.readFile(path)
+    .then((data) => JSON.parse(data))
+    .then((data) =>
+      data.filter((talker) =>
+        talker.name.toLowerCase().includes(searchQuery.toLowerCase())))
+    .then((data) => res.status(200).json(data))
+    .catch((err) => {
+      console.error(err);
+      process.exit(1);
+    });
+};

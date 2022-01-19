@@ -13,6 +13,8 @@ const {
   createTalker,
   editTalker,
   deleteTalker,
+  validateQuery,
+  searchTalker,
 } = require('../controllers/talkerController');
 
 router
@@ -27,6 +29,8 @@ router
     validateTalkRate,
     createTalker,
   );
+
+router.get('/search', validateToken, validateQuery, searchTalker);
 
 router
   .route('/:id')
